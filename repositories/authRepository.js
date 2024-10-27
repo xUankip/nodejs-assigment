@@ -41,3 +41,24 @@ exports.assignPermissionToRole = async (roleName, permissions) => {
     await role.save();
     return role;
 };
+// exports.getUsers = async (req, res) => {
+//     return User.find({})
+// }
+
+exports.getUsers = async (skip, limit) => {
+    return User.find().skip(skip).limit(limit)
+}
+
+exports.findById = async (id) => {
+    return User.findById({_id: id}).exec()
+}
+
+exports.updateUser = async (data) => {
+    const user = await User.update(data)
+    return user.save();
+}
+
+exports.HardDeleteUser = async (req, res) => {
+    const user = await User.findById(req.params.id)
+    await user.deleteOne()
+}
