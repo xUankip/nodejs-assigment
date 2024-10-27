@@ -1,0 +1,32 @@
+{
+  "name": "nodejs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "NODE_ENV=testing jest"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.0.3",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.5",
+    "ejs": "~2.6.1",
+    "enum": "^3.0.4",
+    "express": "^4.21.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-layout": "^0.1.0",
+    "express-openid-connect": "^2.17.1",
+    "http-errors": "~1.6.3",
+    "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.7.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.7",
+    "request-promise": "^4.2.6"
+  }
+}

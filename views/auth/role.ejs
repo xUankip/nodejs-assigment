@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Vai Trò</title>
+</head>
+<body>
+<h1>Quản Lý Vai Trò</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Tên Vai Trò</th>
+        <th>Mô Tả</th>
+        <th>Quyền</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% roles.forEach(role => { %>
+        <tr>
+            <td><%= role.name %></td>
+            <td><%= role.description %></td>
+            <td><%= role.permissions.map(p => p.url).join(', ') %></td>
+        </tr>
+    <% }) %>
+    </tbody>
+</table>
+</body>
+</html>
