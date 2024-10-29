@@ -19,6 +19,23 @@ exports.createUser = (username, email, password, roleIds) => {
 exports.findRolesByName = (name) => {
     return Role.find({ name: { $in: name } });
 };
+exports.createRole = async (roleName) => {
+    const existingRole = await Role.findOne({ name: roleName });
+    if (!existingRole) {
+        const newRole = new Role({ name: roleName });
+        return newRole.save();
+    }
+    return existingRole;
+};
+
+exports.createPermission = async (url, method) => {
+    const permission = await Permission.findOne({ url, method });
+    if (!permission) {
+        const newPermission = new Permission({ url, method });
+        return newPermission.save();
+    }
+    return permission;
+};
 
 exports.findUserById = (userId) => {
     return User.findById(userId).populate({
@@ -29,15 +46,21 @@ exports.findUserById = (userId) => {
         }
     });
 };
+
 exports.assignPermissionToRole = async (roleName, permissions) => {
     const role = await Role.findOne({ name: roleName });
     if (!role) {
         throw new Error(`Role ${roleName} không tồn tại`);
     }
 
-    const permissionDocs = await Permission.find({ url: { $in: permissions.urls }, method: { $in: permissions.methods } });
+    const permissionIds = [];
+    for (const permission of permissions) {
+        const { url, method } = permission;
+        const permissionDoc = await exports.createPermission(url, method);
+        permissionIds.push(permissionDoc._id);
+    }
 
-    role.permissions = permissionDocs.map(permission => permission._id);
+    role.permissions = permissionIds;
     await role.save();
     return role;
 };

@@ -23,8 +23,20 @@ const permissionAdminGet = new Permissions({
 
 const permissionCreateUserPost = new Permissions({
     name: 'Create User',
-    url: '/user/create',
+    url: '/user',
     method: 'POST',
+},{
+    name: 'User1',
+    url: '/user1',
+    method: 'POST',
+},{
+    name: 'User2',
+    url: '/user2',
+    method: 'GET',
+},{
+    name: 'User1',
+    url: '/user1',
+    method: 'GET',
 });
 
 const createUser = async (username, email, password, role) => {

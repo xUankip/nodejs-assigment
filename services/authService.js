@@ -10,21 +10,44 @@ exports.register = async (username, email, password, role) => {
         throw new Error('Email đã tồn tại');
     }
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const userRoles = await authRepository.findRolesByName(role);
-    if (!userRoles.length) {
-        throw new Error('Role không tồn tại');
+
+    // Đảm bảo role tồn tại trong database
+    const userRoles = [];
+    for (const roleName of role) {
+        const newRole = await authRepository.createRole(roleName);
+        userRoles.push(newRole._id);
     }
-    const roleIds = userRoles.map(r => r._id);
 
-    await authRepository.createUser(username, email, hashedPassword, roleIds);
+    await authRepository.createUser(username, email, hashedPassword, userRoles);
 
-    await authRepository.assignPermissionToRole(role, {
-        urls: ['/admin'],
-        methods: ['GET']
-    }, {
-        urls:['/user/create'],
-        methods: ['POST']
-    });
+    // Gán permissions cho từng role nếu cần thiết
+    if (role.includes('Admin')) {
+        await authRepository.assignPermissionToRole('Admin', [
+            { url: '/admin', method: 'GET' },
+            { url: '/admin', method: 'POST' },
+            { url: '/admin', method: 'DELETE' },
+        ]);
+    }
+
+    if (role.includes('User')) {
+        await authRepository.assignPermissionToRole('User', [
+            { url: '/user', method: 'POST' },
+            { url: '/user', method: 'GET' },
+            { url: '/user1', method: 'POST' },
+            { url: '/user1', method: 'GET' },
+            { url: '/user2', method: 'POST' },
+            { url: '/user2', method: 'GET' },
+        ]);
+    }
+
+    if (role.includes('Editor')) {
+        await authRepository.assignPermissionToRole('Editor', [
+            { url: '/editor', method: 'POST' },
+            { url: '/editor', method: 'GET' },
+            { url: '/editor1', method: 'POST' },
+            { url: '/editor1', method: 'GET' },
+        ]);
+    }
 };
 
 exports.login = async (email, password) => {
